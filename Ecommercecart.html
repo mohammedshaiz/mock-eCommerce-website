@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Cards</title>
+    <style>
+      /* Styling for the page and cards */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        margin: 0;
+      }
+
+      /* Container styling to arrange cards in rows */
+      #productContainer {
+        display: flex;
+        flex-wrap: wrap;
+        max-width: 1000px; /* Limit the container width */
+        gap: 20px; /* Space between cards */
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .card {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 22%; /* Adjust width to fit 4 cards per row */
+        padding: 15px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .card img {
+        width: 100%;
+        height: auto;
+        border-radius: 5px;
+      }
+
+      .card-title {
+        font-weight: bold;
+        font-size: 1.1em;
+        margin: 10px 0;
+      }
+
+      .card-price {
+        color: #2a9d8f;
+        font-size: 1.2em;
+        margin: 10px 0;
+      }
+
+      .card-description {
+        font-size: 0.9em;
+        color: #666;
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        .card {
+          width: 45%; /* Adjust to 2 cards per row on smaller screens */
+        }
+      }
+
+      @media (max-width: 480px) {
+        .card {
+          width: 100%; /* Adjust to 1 card per row on very small screens */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Container for the cards -->
+    <div id="productContainer"></div>
+
+    <script>
+      async function fetchProducts() {
+        try {
+          // Fetch product data from the Fake Store API
+          const response = await fetch("https://fakestoreapi.com/products");
+          const products = await response.json();
+
+          // Container for the product cards
+          const container = document.getElementById("productContainer");
+
+          // Create at least 30 cards by repeating product data if needed
+          let cardCount = 0;
+          while (cardCount < 30) {
+            products.forEach((product) => {
+              if (cardCount >= 30) return;
+
+              // Create the card element
+              const card = document.createElement("div");
+              card.classList.add("card");
+
+              // Set the card's content
+              card.innerHTML = `
+                            <img src="${product.image}" alt="${product.title}">
+                            <div class="card-title">${product.title}</div>
+                            <div class="card-price">$${product.price}</div>
+                            <div class="card-description">${product.description}</div>
+                        `;
+
+              // Append the card to the container
+              container.appendChild(card);
+              cardCount++;
+            });
+          }
+        } catch (error) {
+          console.error("Error fetching products:", error);
+        }
+      }
+
+      // Call the function to load products when the page loads
+      fetchProducts();
+    </script>
+  </body>
+</html>
